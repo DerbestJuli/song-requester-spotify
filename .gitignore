@@ -1,0 +1,14 @@
+# Geheimnisse & lokale Zustände – niemals committen
+.env
+.spotify_session.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Editoren / OS
+.DS_Store
+.vscode/
+.idea/

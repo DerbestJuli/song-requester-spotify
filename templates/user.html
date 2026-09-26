@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Song wünschen</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div>
+        <p class="kicker">Jugend-Jukebox</p>
+        <h1>Welchen Song sollen wir spielen?</h1>
+        <p class="sub">Nur jugendfreundliche Musik. Jede Anfrage prüft jemand vom Team, bevor sie in die Warteschlange kommt.</p>
+      </div>
+    </header>
+
+    <section class="card" id="now-card" hidden>
+      <p class="kicker">Gerade läuft</p>
+      <div class="now" id="now-playing"></div>
+    </section>
+
+    <section class="card">
+      <form id="search-form" autocomplete="off">
+        <label for="q">Suche nach Titel oder Interpret</label>
+        <div class="search-row" style="margin-top:8px">
+          <div class="search-input-wrap">
+            <input type="text" id="q" name="q" placeholder="z. B. Titel oder Band" required minlength="2">
+            <button type="button" class="search-clear" id="clear-search" aria-label="Suche und Ergebnisse löschen" title="Suche löschen">×</button>
+          </div>
+          <button type="submit">Suchen</button>
+        </div>
+      </form>
+      <p class="msg" id="search-msg"></p>
+      <div class="song-list" id="results"></div>
+    </section>
+
+    <section class="card">
+      <p class="kicker">Als Nächstes</p>
+      <div class="song-list" id="queue"></div>
+      <p class="empty" id="queue-empty">Noch nichts in der Warteschlange.</p>
+    </section>
+
+    <footer class="note">
+      Doppelte Wünsche siehst du direkt am Treffer. Die aktuelle Musik läuft weiter, wenn du etwas anfragst.
+    </footer>
+  </div>
+  <script src="{{ url_for('static', filename='user.js') }}"></script>
+</body>
+</html>

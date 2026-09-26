@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jukebox Admin</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="wrap admin-wrap">
+    <header class="hero">
+      <div>
+        <p class="kicker">Admin</p>
+        <h1>Freigabe &amp; Wiedergabe</h1>
+        <p class="sub">Neue Wünsche erscheinen rechts. Erst nach deiner Bestätigung landen sie in der Warteschlange – der laufende Song bleibt unberührt.</p>
+      </div>
+      <form action="{{ url_for('admin_logout') }}" method="post">
+        <button class="ghost" type="submit">Abmelden</button>
+      </form>
+    </header>
+
+    {% if spotify_error %}
+      <div class="card" style="border-color: var(--bad)">
+        <p class="msg bad">Spotify-Fehler: {{ spotify_error }}</p>
+      </div>
+    {% endif %}
+
+    {% if not spotify_connected %}
+      <section class="card spotify-connect">
+        <p class="kicker">Erster Schritt</p>
+        <h2 style="margin:0 0 8px">Mit Spotify verbinden</h2>
+        <p class="sub">
+          Verbinde den <strong>Spotify-Premium-Account</strong>, auf dem die Musik laufen soll.
+          Die Webseite spielt selbst keine Musik ab: Freigegebene Songs werden direkt in die
+          <strong>Spotify-Warteschlange</strong> gelegt. Spotify muss auf dem gewünschten Gerät aktiv sein.
+        </p>
+        <p style="margin-top:14px"><a class="btn" href="{{ url_for('spotify_login') }}">Mit Spotify verbinden</a></p>
+      </section>
+    {% endif %}
+
+    <div class="grid-2">
+      <div>
+        <section class="card">
+          <p class="kicker">Spotify</p>
+          {% if spotify_connected %}
+            <div class="player-box spotify-player" id="player-box">
+              <div class="player-art" id="player-art"></div>
+              <div class="player-track">
+                <h2 id="player-title">Kein Song geladen</h2>
+                <div class="who" id="player-artist"></div>
+                <div class="progress"><div class="progress-fill" id="player-progress"></div></div>
+              </div>
+            </div>
+            <div class="row-actions" style="margin-top:12px">
+              <button type="button" id="btn-play">Play / Pause</button>
+              <button type="button" id="btn-skip">Nächster Song</button>
+              <span class="msg" id="player-msg">Verbinde Gerät …</span>
+            </div>
+            <form action="{{ url_for('spotify_disconnect') }}" method="post" style="margin-top:10px">
+              <button class="ghost" type="submit" style="font-size:0.78rem">Spotify trennen</button>
+            </form>
+          {% else %}
+            <p class="empty">Erst oben mit Spotify verbinden.</p>
+          {% endif %}
+        </section>
+        <section class="card" id="now-card">
+          <p class="kicker">Jetzt</p>
+          <div id="now-playing" class="empty">Nichts läuft.</div>
+        </section>
+        <section class="card">
+          <p class="kicker">Warteschlange</p>
+          <div class="song-list" id="queue"></div>
+          <p class="empty" id="queue-empty">Leer – freigegebene Songs landen direkt in der Spotify-Warteschlange.</p>
+        </section>
+      </div>
+      <div>
+        <section class="card">
+          <p class="kicker">Eigene Songs (DJ)</p>
+          <p class="sub">Direkt in die Warteschlange, ohne Freigabe-Umweg.</p>
+          <form id="dj-search-form" autocomplete="off" style="margin-top:10px">
+            <div class="search-row">
+              <div class="search-input-wrap">
+                <input type="text" id="dj-q" placeholder="Titel oder Interpret" required minlength="2">
+                <button type="button" class="search-clear" id="clear-dj-search" aria-label="Suche und Ergebnisse löschen" title="Suche löschen">×</button>
+              </div>
+              <button type="submit">Suchen</button>
+            </div>
+          </form>
+          <p class="msg" id="dj-msg"></p>
+          <div class="song-list" id="dj-results"></div>
+        </section>
+        <section class="card">
+          <p class="kicker">Wartet auf Freigabe</p>
+          <div class="song-list" id="pending"></div>
+          <p class="empty" id="pending-empty">Keine offenen Anfragen.</p>
+        </section>
+        <section class="card qr-box">
+          <p class="kicker">Für Gäste</p>
+          <p class="sub">QR-Code aufs Handy: {{ user_url }}</p>
+          <p><img src="{{ url_for('qr_svg') }}" alt="QR-Code zur Gästeseite"></p>
+          <p><a class="btn ghost" href="{{ url_for('qr_page') }}" target="_blank" rel="noopener">Große QR-Seite</a></p>
+        </section>
+      </div>
+    </div>
+  </div>
+  <script>window.SPOTIFY_CONNECTED = {{ 'true' if spotify_connected else 'false' }};</script>
+  <script src="{{ url_for('static', filename='admin.js') }}"></script>
+</body>
+</html>

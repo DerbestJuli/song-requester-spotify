@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Song wünschen – QR</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero" style="justify-content:center;text-align:center">
+      <div>
+        <p class="kicker">Scan mich</p>
+        <h1>Song wünschen</h1>
+        <p class="sub">{{ user_url }}</p>
+      </div>
+    </header>
+    <section class="card qr-box">
+      <img src="{{ url_for('qr_svg') }}" alt="QR-Code">
+      <p class="sub">Gleiches WLAN wie die Jukebox.</p>
+    </section>
+  </div>
+</body>
+</html>
